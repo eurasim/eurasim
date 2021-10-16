@@ -1,0 +1,63 @@
+input[type="radio"] {
+    -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+    -moz-appearance: checkbox;    /* Firefox */
+    -ms-appearance: checkbox;     /* not currently supported */
+}
+
+#roadnetform {
+	font-size: 90%;
+}
+
+#roadnetform table {
+	 border: 1px solid #000;
+	 border-collapse: collapse;
+}
+
+#roadnetform th { 
+	background:#E5E5E5 repeat-x scroll center left; 
+	color:#000;
+	padding:0px 0px;
+	padding-left:5px;
+	padding-right:5px;
+	text-align:center;
+	border: 1px solid #000;
+}
+
+#roadnetform td { 
+	color:#000;
+	border: 1px solid #000;
+	padding:0px 0px;
+	padding-left:4px;
+}
+
+#roadnetform h4 { 
+	margin:0px; 
+	padding:0px;
+	margin-top:15px;
+	margin-bottom:5px;
+	float: center;
+	font-weight:bold;
+	font-size: 110%;
+}
+
+#servicedata {
+	width:62%;
+}
+
+#servicedata input{
+	margin-top:5px;
+	margin-right:20px;
+}
+
+#servicedata .mytext{
+	width:200px;
+	margin-right:40px;
+}
+
+#roadnetform .imgmode {
+	width:20px;
+	height:20px;
+	margin-top:4px;
+	padding-top:4px;
+	margin-left:5px;
+}

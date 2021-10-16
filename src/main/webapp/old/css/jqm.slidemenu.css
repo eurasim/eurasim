@@ -1,0 +1,110 @@
+.slidemenu {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 0px;
+	height: 100%;
+	background-color: #FFFFFF;
+	-webkit-box-shadow: 3px 0px 5px -2px #32394A;
+	box-shadow: 3px 0px 5px -2px #32394A;
+	z-index: 999;
+	display: none;
+	overflow: auto;
+	-webkit-overflow-scrolling: touch;
+}
+
+#datepicker {
+	width: 90px;
+	margin-right: 10px;
+}
+
+#timepicker {
+	width: 70px;
+}
+
+.slidemenu img {
+	margin-top: 16px;
+	margin-bottom: 0px;
+}
+
+.slidemenu h4 {
+	margin-top: 15px;
+	margin-bottom: 15px;
+	text-align:center;
+	font-size:110%;
+}
+
+.slidemenu hr {
+	margin-left: 50px;
+	margin-right: 50px;
+	margin-top: 40px;
+	margin-bottom: 10px;
+}
+
+.slidemenu .input img {
+	text-align: center;
+	float: center;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.slidemenu .input {
+	text-align: center;
+	float: center;
+}
+
+.slidemenu .result h4 { 
+	font-size: 110%;
+}
+
+.slidemenu .result {
+	text-align: left;
+	float: left;
+	width:284px;
+	margin-left: 19px;
+	font-weight: bold;
+	font-size: 90%;
+}
+
+.slidemenu .result label {
+	font-weight: normal;
+}
+
+.slidemenu .input img {
+	vertical-align: middle;
+	width: 25px;
+	padding-bottom:1px;
+}
+
+.slidemenu .input input {
+	height: 20px;
+	width: 250px;
+	font-size:16px;
+}
+
+.slidemenu .input select {
+	width: 250px;
+	line-height:20px;
+	font-size:24px;
+}
+
+.slidemenu #linksOn {
+	width: 40px;
+	float: right;
+	margin-right:65px;
+	margin-top:7.5px;
+}
+
+.slidemenu #linkCheck {
+	width:312px;
+	float: rigth;
+	text-align: center;
+	vertical-align: middle;
+}
+
+.slidemenu #linkCheck label {
+	float: left;
+	margin-bottom: 10px;
+	margin-left:90px;
+}
+

@@ -1,0 +1,888 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v4.1.1">
+    <title>Evacuation Planning on Urban Areas using Simulation</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.5/examples/starter-template/">
+
+    <!-- Bootstrap core CSS -->
+	<link href="bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+	
+	<!--MapBox-->
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="starter-template.css" rel="stylesheet">
+</head>
+ <body>
+
+ <!-- Modal -->
+ <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="exampleModalLabel">Simulation settings</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body" style="text-align: center">
+                 <table class="table table-hover mb-0"  style="width:100%;" id="settings">
+
+                     <!--Table head-->
+                     <thead>
+                     <tr>
+                         <th class="th-lg" style="width: 50%;"><a>Parameter<i class="fas fa-sort ml-1"></i></a></th>
+                         <th class="th-lg" style="width: 50%"><a>Value<i class="fas fa-sort ml-1"></i></a></th>
+                     </tr>
+                     </thead>
+                     <!--Table head-->
+
+                     <!--Table body-->
+                     <tbody>
+                     <tr>
+                     <tr><td>movement speed</td><td><input type="text" value="1.419" size="10"></td></tr>
+                     <tr><td>density</td><td><input type="text" value="6.6" size="10"></td></tr>
+                     <tr><td>tick speed</td><td><input type="text" value="1" size="10"></td></tr>
+                     </tr>
+                     </tbody>
+                     <!--Table body-->
+                 </table>
+             </div>
+             <div class="modal-footer">
+                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                 <button type="button" class="btn btn-primary">Save changes</button>
+             </div>
+         </div>
+     </div>
+ </div>
+
+  	<nav class="navbar navbar-expand-md navbar-custom fixed-top">
+  		<button class="openbtn" onclick="openNav()" style="margin-right: 10px;">☰</button>
+  		
+  		<a class="navbar-brand" href="#">EURASIM</a>
+
+  		
+		
+  		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    		<ul class="navbar-nav mr-auto">
+      			<li class="nav-item dropdown">
+        			<a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menu</a>
+        			<div class="dropdown-menu" aria-labelledby="dropdown01">
+      	    			<a class="dropdown-item"  href="#" data-toggle="modal" data-target="#exampleModal">Simulation settings</a>
+      	    			<div class="dropdown-divider"></div>
+      	    			<a class="dropdown-item" href="#">Export (under construction)</a>
+      		  		</div>
+      			</li>
+      			<li class="nav-item">
+                	<a class="nav-link waves-effect waves-light" target="_blank" href="https://pbour.github.io/docs/sigspatial21a.pdf">Publication</a>
+            	</li>
+      			<li class="nav-item">
+                	<a class="nav-link waves-effect waves-light" target="_blank" href="https://github.com/eurasim/source">Source Code</a>
+            	</li>
+    		</ul>
+
+      		<input class="form-control mr-sm-2" type="text" placeholder="Search POIs (uner construction)" aria-label="Search" style="width:200pt;">
+      		<button class="btn btn-secondary my-2 my-sm-0" style="background-color:#0072ab; border-color:#0072ab">Search</button>
+
+  		</div>
+	</nav>
+ 	
+ 	<div id="mySidebar" class="sidebar" style="text-align: center;">
+		
+  		
+  		<!--Accordion wrapper-->
+<div class="accordion md-accordion accordion-blocks" id="accordionEx78" role="tablist" aria-multiselectable="true">
+
+  <!-- Accordion card -->
+  <div class="card">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="heading79">
+
+      <!-- Heading -->
+      <h5 class="mt-1 mb-0">
+      <a data-toggle="collapse" data-parent="#accordionEx78" href="#collapse79" aria-expanded="true" aria-controls="collapse79">  
+          <span>Points of Interest</span>
+          <i class="fas fa-angle-down rotate-icon"></i>
+      </a>
+		</h5>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapse79" class="collapse" role="tabpanel" aria-labelledby="heading79" data-parent="#accordionEx78">
+      <div class="card-body">
+
+        <table style="width:100%; text-align:left;">
+      		<tr><td><input id="boxTheater" onClick="checkboxClicked('boxTheater')" value="Theater" type="checkbox"></input></td><td>Cinema/Theater</td><td><input id="boxPark" onClick="checkboxClicked('boxPark')" value="Park" type="checkbox"></input></td><td>Park/Square</td></tr>
+      		<tr><td><input id="boxHospital" onClick="checkboxClicked('boxHospital')" value="Hospital" type="checkbox"></input></td><td>Hospital</td>		<td><input id="boxSchool" onClick="checkboxClicked('boxSchool')" value="School" type="checkbox"></input></td><td>School/University</td></tr>
+      		<tr><td><input id="boxMuseum" onClick="checkboxClicked('boxMuseum')" value="Museum" type="checkbox"></input></td><td>Museum</td>			<td><input id="boxMarket" onClick="checkboxClicked('boxMarket')" value="Market" type="checkbox"></input></td><td>Shopping</td></tr>
+      		<tr><td><input id="boxMusic" onClick="checkboxClicked('boxMusic')" value="Music" type="checkbox"></input></td><td>Music venue</td>		<td><input id="boxStadium" onClick="checkboxClicked('boxStadium')" value="Stadium" type="checkbox"></input></td><td>Stadium</td></tr>
+      		<!-- <tr><td><input id="boxNightlife" onClick="checkboxClicked('boxNightlife')" value="Nightlife" type="checkbox"></input></td><td>Nightlife spot</td>		<td></td><td></td></tr>-->
+      	</table>
+      </div>
+    </div>
+  </div>
+  <!-- Accordion card -->
+
+  <!-- Accordion card -->
+  <div class="card" style="text-align: center; padding-left:0pt; margin-left:0pt;">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="heading80" style="text-align: center;">
+
+      <!-- Heading -->
+      <h5 class="mt-1 mb-0">
+      <a data-toggle="collapse" data-parent="#accordionEx78" href="#collapse80" aria-expanded="true" aria-controls="collapse80">
+        
+          <span>Risk Areas</span>
+          <i class="fas fa-angle-down rotate-icon"></i>
+        
+      </a>
+      </h5>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapse80" class="collapse show" role="tabpanel" aria-labelledby="heading80" data-parent="#accordionEx78" style="text-align: left; padding-left:0pt; margin-left:0pt;  width:350px;">
+      <div class="card-body" style="text-align: left; padding-left:0pt; padding-right:10pt; margin-left:0pt; margin-right:10pt;">
+            <!-- Table responsive wrapper -->
+        <div class="table-responsive mx-3" style="width:100%; text-align:center;">
+          <!--Table-->
+          <table class="table table-hover mb-0"  style="width:100%;" id="riskAreaTable">
+
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="th-lg" style="width: 62%;"><a>Location<i class="fas fa-sort ml-1"></i></a></th>
+                <th class="th-lg" style="width: 20%;"><a>Evacuees<i class="fas fa-sort ml-1"></i></a></th>
+                <th class="th-lg" style="width: 18%;"></th>
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody>
+            <!--  
+              <tr>
+                <td><input type="text" size="17" readonly></td>
+                <td><input type="text" size="6" maxlength="6"></td>
+                <td><button style="margin: 0px;" onClick="deleteRiskArea($(this).parents('tr')[0].rowIndex)">X</button></td>
+              </tr>
+             -->
+            </tbody>
+            <!--Table body-->
+          </table>
+          <!--Table-->
+        </div>
+        <!-- Table responsive wrapper -->
+		<!--Top Table UI-->
+        <div class="table-ui p-2 mb-3 mx-3 mb-4"  style="text-align: center; width:100%;">
+              <!--Blue select
+        	<select class="mdb-select colorful-select dropdown-info mx-2">
+              	<option value="None" selected>Add group of locations</option>
+                <option value="Theater" >Cinema/Theater (73)</option>
+                <option value="Hospital">Hospital (71)</option>               
+                <option value="Museum">Museum (61)</option>
+                <option value="Music">Music venue  (133)</option>
+                <option value="Nightlife">Nightlife spot (168)</option>
+                <option value="Park">Park/Square  (390)</option>
+                <option value="School">School/University (10)</option>
+                <option value=Market>Shopping (5)</option>
+                <option value="Stadium">Stadium (93)</option>
+            </select>
+            /Blue select-->
+			<button class="btn btn-primary btn-sm" style="margin-top:5pt;" onClick="addRiskAreaFromMap()">Add from map</button><br>
+			<label style="margin-top:5pt; margin-bottom:0pt; color: #FF0000;" id="riskAreaLabel"></label>
+        </div>
+        <!--Top Table UI-->
+      </div>
+    </div>
+  </div>
+  <!-- Accordion card -->
+
+  <!-- Accordion card -->
+  <div class="card">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="card-heading">
+      <!-- Heading -->
+       <h5 class="mt-1 mb-0">
+      <a data-toggle="collapse" data-parent="#accordionEx78" href="#collapse81" aria-expanded="true" aria-controls="collapse81">
+          <span>Assembly Points</span>
+          <i class="fas fa-angle-down rotate-icon"></i>
+      </a>
+       </h5>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapse81" class="collapse" role="tabpanel" aria-labelledby="heading"
+      data-parent="#accordionEx78">
+      <div class="card-body" style="text-align: left; padding-left:0pt; padding-right:10pt; margin-left:0pt; margin-right:10pt;">
+
+       <!-- Table responsive wrapper -->
+        <div class="table-responsive mx-3" style="width:100%; text-align:center;">
+          <!--Table-->
+          <table class="table table-hover mb-0"  style="width:100%;" id="assemblyPointTable">
+
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="th-lg" style="width: 62%;"><a>Location<i class="fas fa-sort ml-1"></i></a></th>
+                <th class="th-lg" style="width: 20%;"><a>Capacity<i class="fas fa-sort ml-1"></i></a></th>
+                <th class="th-lg" style="width: 18%;"></th>
+              </tr>
+            </thead>
+            <!--Table head-->
+
+            <!--Table body-->
+            <tbody>
+            <!--  
+              <tr>
+                <td><input type="text" size="17" readonly></td>
+                <td><input type="text" size="6" maxlength="6"></td>
+                <td><button style="margin: 0px;" onClick="deleteRiskArea($(this).parents('tr')[0].rowIndex)">X</button></td>
+              </tr>
+             -->
+            </tbody>
+            <!--Table body-->
+            <!--Table body-->
+          </table>
+          <!--Table-->
+        </div>
+        <!-- Table responsive wrapper -->
+		<!--Top Table UI-->
+        <div class="table-ui p-2 mb-3 mx-3 mb-4"  style="text-align: center; width:100%;">
+              <!--Blue select
+			<select class="mdb-select colorful-select dropdown-info mx-2">
+              	<option value="None" selected>Add group of locations..</option>
+                <option value="Theater" >Cinema/Theater (73)</option>
+                <option value="Hospital">Hospital (71)</option>
+                <option value="Museum">Museum (61)</option>
+                <option value="Music">Music venue (133)</option>
+                <option value="Nightlife">Nightlife spot (168)</option>
+                <option value="Park">Park/Square (390)</option>
+                <option value="School">School/University (10)</option>
+                <option value=Market>Shopping (5)</option>
+                <option value="Stadium">Stadium (93)</option>
+            </select>
+            /Blue select-->
+			<button class="btn btn-primary btn-sm" style="margin-top:5pt;" onClick="addAssemblyPointFromMap()">Add from map</button><br>
+			<label style="margin-top:5pt; margin-bottom:0pt; color: #FF0000;" id="assemblyPointLabel"></label>
+        </div>
+        <!--Top Table UI-->
+      </div>
+    </div>
+  </div>
+  <!-- Accordion card -->
+  <div class="card">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="card-algo-heading">
+      <!-- Heading -->
+       <h5 class="mt-1 mb-0">
+      <a data-toggle="collapse" data-parent="#accordionEx78" href="#collapse82" aria-expanded="true" aria-controls="collapse82">
+          <span>Algorithm Selection</span>
+      </a>
+      </h5>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapse82" class="collapse" role="tabpanel" aria-labelledby="heading"
+      data-parent="#accordionEx78">
+      <div class="card-body" style="text-align: center; padding-left:0pt; padding-right:10pt; margin-left:0pt; margin-right:10pt;">
+			<select class="mdb-select colorful-select dropdown-info mx-2" id="algorithm">
+              	<option value="None">Select algorithm</option>
+                <option value="greedy" selected>Greedy Evacuation Route Selection</option>
+                <option value="ccrp">Capacity Constrained Route Planner</option>
+            </select><br>
+            <input type="checkbox" id="simulationBox" name="simulationBox">
+            <label style="font-size:14px; margin-top:8px;" for="simulationBox">Simulate Plan</label>
+            
+      </div>
+    </div>
+  </div>
+  <!-- Accordion card -->
+  <!-- Accordion card -->
+  <div class="card">
+
+    <!-- Card header -->
+    <div class="card-header" role="tab" id="heading">
+      <!-- Heading -->
+      	 <h5 class="mt-1 mb-0">
+      	<a data-toggle="collapse" data-parent="#accordionEx78" href="#collapse83" aria-expanded="true" aria-controls="collapse83">
+          	<span>Results</span>  
+      	</a>
+      	</h5>
+    </div>
+
+    <!-- Card body -->
+    <div id="collapse83" class="collapse" role="tabpanel" aria-labelledby="heading"
+      data-parent="#accordionEx78">
+      <div class="card-body" style="text-align: center; padding-left:0pt; padding-right:10pt; margin-left:0pt; margin-right:10pt;">
+			Estimated egress time = <label style="font-size:14px;" id="egressTimeLabel">0</label> seconds. <br>
+            <div id="simulationRes" hidden>
+                Simulated egress time = <label style="font-size:14px;" id="simulatedTimeLabel">0</label> seconds. <br>
+  			    <label style="font-size:14px; margin-top:12px;" for="vol">Evacuation progress:</label> <br>
+      			<input type="range" id="vol" name="vol" min="0" max="4062" step=1 value="4062"><br>
+            </div>
+            <br>
+  			<div class="table-responsive mx-3" style="width:100%; text-align:center;">
+  			<table class="table"  style="width:100%; line-height: 12px;" id="resultTable">
+
+            <!--Table head-->
+            <thead>
+              <tr>
+                <th class="th-lg" style="width: 6%; height:10pt"></th>
+                <th class="th-lg" style="width: 47%;"># Evacuees</th>
+                <th class="th-lg" style="width: 47%;">Egress time</th>
+              </tr>
+            </thead>
+            <!--Table head-->
+            <!--Table body-->
+            <tbody>
+            <!--  
+              <tr><td><div class="square" style="width:14px; height:14px; background-color: #ff0000;"></div></td><td>50</td><td>50</td></tr>
+              <tr><td><div class="square" style="width:14px; height:14px; background-color: #ff0000;"></div></td><td>50</td><td>50</td></tr>
+              <tr><td><div class="square" style="width:14px; height:14px; background-color: #ff0000;"></div></td><td>50</td><td>50</td></tr>
+            -->
+            </tbody>
+            <!--Table body-->
+            <!--Table body-->
+          </table>
+  			</div>
+      </div>
+    </div>
+  </div>
+  <!-- Accordion card -->
+</div>
+<!--/.Accordion wrapper-->
+        <textarea rows = "10" cols = "35" name = "description" id="dump" hidden=true></textarea>
+
+	<button class="btn btn-primary btn-sm" style='margin-top: 10pt; margin-bottom:10pt; margin-right:10pt;' onClick='clearAll()'>Reset</button>
+	<button class="btn btn-primary btn-sm" style='margin-top: 9pt; margin-bottom:10pt;' onClick='computeEvacuationPlan()'>Compute Evacuation Plan</button> <br>
+    <iframe id="loadingGif" src="https://giphy.com/embed/3oEjI6SIIHBdRxXI40" frameBorder="0" width="192" height="192" class="giphy-embed" hidden></iframe>
+	</div>
+ 	
+	<main id="main" role="main" class="container" style="margin-left: 0px; padding: 0px;">
+		<div id="mapcontainer" class="map_container" data-role="content" style="width:100%; height:100%; margin-left: 0px;">
+			<div id="map" style="position:absolute; top:0;	bottom:0; width:100%; height:100%; margin-left: 0px; padding-left: 0px;"></div>
+            <div class="shadow"></div>
+        </div>
+	</main><!-- /.container -->
+	<script>
+		var routeColors = ['#00008B', '#A52A2A', '#1E90FF', '#228B22', '#FF00FF', '#CD5C5C', '#20B2AA', '#808000', '#DA70D6', '#A0522D', '#D2691E', '#8A2BE2', '#000000', '#00FFFF', '#A9A9A9']
+		
+		var mapClickActiveInput = -1;
+		var activeNameBox = null;
+		var activeCoordinatesBox = null;
+		var activeMarkerId = null;
+		
+		var startLon = -1;
+		var startLat = -1;
+		var sidebarHidder = true;
+		
+		var markersDict = {};
+		var layersList = [];
+        var sourceIdsAdded = [];
+		
+		mapboxgl.accessToken = 'pk.eyJ1IjoidGhvZG9yaXNjam4iLCJhIjoiY2tkcWtocWJkMHBrcjJzb2RkazFhbnJhdyJ9.oK7oBDrfCyJWMtbnMcp5uQ';
+		const map = new mapboxgl.Map({
+			container: 'map', // container id
+			style: 'mapbox://styles/mapbox/streets-v11', // style URL
+			center: [13.404954, 52.520007], // starting position [lng, lat]
+			zoom: 11, // starting zoom
+            attributionControl: false
+		});
+        map.addControl(new mapboxgl.AttributionControl({
+            customAttribution: '<a href="https://mapicons.mapsmarker.com/" target="_blank">Map Icons Collection</a>'
+        }));
+		var geoJSON;
+		
+		map.loadImage('markers/cinema.png', function (error, image) { if (error) throw error; map.addImage('TheaterIcon', image); });
+		map.loadImage('markers/hospital.png', function (error, image) { if (error) throw error; map.addImage('HospitalIcon', image); });
+		map.loadImage('markers/museum.png', function (error, image) { if (error) throw error; map.addImage('MuseumIcon', image); });
+		map.loadImage('markers/music.png', function (error, image) { if (error) throw error; map.addImage('MusicIcon', image); });
+		map.loadImage('markers/mall.png', function (error, image) { if (error) throw error; map.addImage('MarketIcon', image); });
+		map.loadImage('markers/park.png', function (error, image) { if (error) throw error; map.addImage('ParkIcon', image); });
+		map.loadImage('markers/stadium.png', function (error, image) { if (error) throw error; map.addImage('StadiumIcon', image); });
+		map.loadImage('markers/university.png', function (error, image) { if (error) throw error; map.addImage('SchoolIcon', image); });
+
+
+
+		openNav();
+			
+		function openNav() {
+			if(sidebarHidder == true) {
+  				document.getElementById("mySidebar").style.width = "350px";
+  				document.getElementById("main").style.marginLeft = "350px";
+  				document.getElementById("mapcontainer").style.marginLeft = "0px";
+  				
+  				sidebarHidder = false;
+  				map.resize();
+			}
+			else {
+				document.getElementById("mySidebar").style.width = "0px";
+	  			document.getElementById("main").style.marginLeft= "0px";
+	  			document.getElementById("mapcontainer").style.marginLeft = "0px";
+	  			sidebarHidder = true;
+	  			
+	  			document.getElementById("riskAreaLabel").innerHTML = "";
+	  			document.getElementById("assemblyPointLabel").innerHTML = "";
+	  			
+	  			mapClickActiveInput = -1;
+	  			activeNameBox = null;
+	  			activeCoordinatesBox = null;
+	  			activeMarkerId = null;
+	  			map.resize();
+			}
+		}
+		
+		function checkboxClicked(boxid) {	
+			var layerId = document.getElementById(boxid).value;
+			if(document.getElementById(boxid).checked == true) {
+				//document.getElementById('dump').value += "MARKERS ADDED ";
+				requestText = "http://localhost:8080/eurasim_war_exploded/POIRetriever?category="+layerId;
+				const http = new XMLHttpRequest();
+				http.open("GET", requestText);
+				http.send();
+				http.onreadystatechange = (e) => {
+					if (http.readyState == 4 && http.status == 200) {
+
+						// Add source
+						if (!map.getSource(layerId)) {
+							map.addSource(layerId, JSON.parse(http.responseText));
+						}
+						
+						var markerIcon = layerId+'Icon';
+
+						// Add a symbol layer
+						if (!map.getLayer(layerId)) {
+							map.addLayer({
+								'id': layerId,
+								'type': 'symbol',
+								'source': layerId,
+								'layout': {
+									'icon-image': markerIcon
+								}
+							});
+						}
+					}
+				}
+			}
+			else {
+				//document.getElementById('dump').value += "MARKERS REMOVED ";
+				if (map.getLayer(layerId)) {
+					map.removeLayer(layerId);
+				}
+				if (map.getSource(layerId)) {
+					map.removeSource(layerId);
+				}
+			}
+		}
+		
+		map.on('click', 'Theater', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'Hospital', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'Museum', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'Music', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		//map.on('click', 'Nightlife', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); });
+		map.on('click', 'Park', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'School', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'Market', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		map.on('click', 'Stadium', function (e) { addPopup(e.features[0].geometry.coordinates.slice(), e.lngLat.lng, e.features[0].properties.description); document.getElementById("map").style.marginLeft = "-350px";});
+		
+		function addPopup(coordinates, lng, name) {
+			var cleanedName = name.replace(/\uFFFD/g, '')
+			cleanedName = cleanedName.replace('/\s/g', "&nbsp;")
+			var description = name+"<br><a href=# onClick=\"addRiskArea(\'"+cleanedName+"\',\'"+coordinates+"\')\">Set as Risk Area</a><br><a href=#  onClick=\"addAssemblyPoint(\'"+cleanedName+"\',\'"+coordinates+"\')\">Set as Assembly Point</a>";
+			 
+			while (Math.abs(lng - coordinates[0]) > 180) {
+				coordinates[0] += lng > coordinates[0] ? 360 : -360;
+			}
+			 
+			new mapboxgl.Popup().setLngLat(coordinates).setHTML(description).addTo(map);
+		}
+		
+		function addRiskArea(str,coordinates) {
+			// <tr><td>1.</td><td><input type='text' size='18' readonly></td><td><input type='text' size='6' maxlength='6'></td><td>X</td></tr>
+			var table = document.getElementById("riskAreaTable");
+			var row = table.insertRow(-1);
+			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			// Add some text to the new cells:
+			cell1.innerHTML = "<input type='text' size='14' readonly value="+str+">";
+			cell2.innerHTML = "<input type='text' size='5' maxlength='5'>";
+			cell3.innerHTML = "<a><img src='img/remove.png' width=20 height=20 onClick=\"deleteRiskArea($(this).parents('tr')[0].rowIndex)\"></a><input type='hidden' value='"+coordinates+"'>";
+			//<button onClick=\"deleteRiskArea($(this).parents('tr')[0].rowIndex)\">X</button>
+			//document.getElementById('dump').value += coordinates;
+			var coord = coordinates.split(",")
+			
+			var el = document.createElement('div');
+			el.style.backgroundImage = "url('markers/skull.png')";
+			el.style.width = '32px';
+			el.style.height = '37px';
+			
+			var marker = new mapboxgl.Marker(el);
+			marker.setLngLat([coord[0], coord[1]]);
+			marker.addTo(map);
+		}
+		
+		function addAssemblyPoint(str,coordinates) {
+			var markerId = Math.floor(Math.random() * 10000);  
+			// <tr><td>1.</td><td><input type='text' size='18' readonly></td><td><input type='text' size='6' maxlength='6'></td><td>X</td></tr>
+			var table = document.getElementById("assemblyPointTable");
+			var row = table.insertRow(-1);
+			// Insert new cells (<td> elements) at the 1st and 2nd position of the "new" <tr> element:
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			var cell3 = row.insertCell(2);
+			// Add some text to the new cells:
+			cell1.innerHTML = "<input type='text' size='14' readonly value="+str+">";
+			cell2.innerHTML = "<input type='text' size='5' maxlength='5'>";
+			cell3.innerHTML = "<a><img src='img/remove.png' width=20 height=20 onClick=\"deleteAssemblyPoint($(this).parents('tr')[0].rowIndex)\"></a><input type='hidden' value='"+coordinates+"'><input type='hidden' value='"+markerId+"'>";
+			//<button onClick=\"deleteAssemblyPoint($(this).parents('tr')[0].rowIndex)\">X</button>
+			//document.getElementById('dump').value += coordinates;
+			
+			var coord = coordinates.split(",")
+			
+			var el = document.createElement('div');
+			el.style.backgroundImage = "url('markers/regroup.png')";
+			el.style.width = '32px';
+			el.style.height = '37px';
+			
+			var marker = new mapboxgl.Marker(el);
+			marker.setLngLat([coord[0], coord[1]]);
+			marker.addTo(map);
+						
+			markersDict[markerId] = marker;
+		}
+		
+		function deleteRiskArea(areaId) {
+			var table = document.getElementById("riskAreaTable");
+			var markerId = table.rows[areaId].cells[2].getElementsByTagName("input")[1].value;
+			var marker = markersDict[markerId];
+			marker.remove();
+			table.deleteRow(areaId);
+			delete markersDict[markerId];
+		}
+		
+		function deleteAssemblyPoint(assemblyId) {
+			var table = document.getElementById("assemblyPointTable");
+			var markerId = table.rows[assemblyId].cells[2].getElementsByTagName("input")[1].value;
+			//document.getElementById("dump").innerHTML = "Deleting "+markerId+"----";
+			var marker = markersDict[markerId];
+			//if(typeof marker == 'undefined') {
+			//	document.getElementById("dump").innerHTML += "OUPS";
+			//}
+			marker.remove();
+			table.deleteRow(assemblyId);
+			delete markersDict[markerId];
+		}
+		
+		map.on('click', function (e) { 
+			if(mapClickActiveInput != -1) {
+				var x = JSON.stringify(e.lngLat["lng"])
+				var y = JSON.stringify(e.lngLat["lat"])
+				
+				document.getElementById(activeCoordinatesBox).value = x+", "+y;
+				document.getElementById(activeNameBox).value = "["+x+", "+y+"]";   
+																
+				var el = document.createElement('div');
+				if(mapClickActiveInput == 0) {	
+					el.style.backgroundImage = "url('markers/skull.png')";
+					document.getElementById("riskAreaLabel").innerHTML = "";
+				}
+				else if(mapClickActiveInput == 1) {	
+					el.style.backgroundImage = "url('markers/regroup.png')";
+					document.getElementById("assemblyPointLabel").innerHTML = "";
+				}
+				el.style.width = '32px';
+				el.style.height = '37px';
+				
+				var marker = new mapboxgl.Marker(el);
+				marker.setLngLat([x, y]);
+				marker.addTo(map);
+				
+				markersDict[activeMarkerId] = marker;
+				
+				mapClickActiveInput = -1;
+				document.getElementById("map").style.marginLeft = "-350px";
+				activeNameBox = null;
+				activeCoordinatesBox = null;
+				activeMarkerId = null;
+			}	
+		});
+		
+		map.on('resize', function() {
+			if(sidebarHidder == true) {
+				document.getElementById("map").style.marginLeft = "0px";
+			}
+			if(sidebarHidder == false) {
+				document.getElementById("map").style.marginLeft = "-350px";
+			}
+		});
+		
+		function addRiskAreaFromMap(){
+			if(mapClickActiveInput == -1) {
+				mapClickActiveInput = 0;
+				var randNum = Math.floor(Math.random() * 1000000); 
+				activeNameBox = "name"+randNum;
+				activeCoordinatesBox = "coordinates"+randNum;
+				activeMarkerId = randNum;
+			
+				document.getElementById("riskAreaLabel").innerHTML = "Click map to select location.";
+				document.getElementById("assemblyPointLabel").innerHTML = "";
+			
+				var table = document.getElementById("riskAreaTable");
+				var row = table.insertRow(-1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				cell1.innerHTML = "<input id='"+activeNameBox+"' type='text' size='14' readonly value='From map'>";
+				cell2.innerHTML = "<input type='text' size='5' maxlength='5'>";
+				cell3.innerHTML = "<a><img src='img/remove.png' width=20 height=20 onClick=\"deleteRiskArea($(this).parents('tr')[0].rowIndex)\"></a><input id='"+activeCoordinatesBox+"' type='hidden' value=''><input id='"+activeMarkerId+"' type='hidden' value='"+activeMarkerId+"'>";
+				//<button onClick=\"deleteRiskArea($(this).parents('tr')[0].rowIndex)\">X</button>
+			}
+		}
+		
+		function addAssemblyPointFromMap(){
+			if(mapClickActiveInput == -1) {
+				mapClickActiveInput = 1;
+				var randNum = Math.floor(Math.random() * 1000000); 
+				activeNameBox = "name"+randNum;
+				activeCoordinatesBox = "coordinates"+randNum;
+				activeMarkerId = randNum;
+			
+				document.getElementById("assemblyPointLabel").innerHTML = "Click map to select location.";
+				document.getElementById("riskAreaLabel").innerHTML = "";
+				
+				var table = document.getElementById("assemblyPointTable");
+				var row = table.insertRow(-1);
+				var cell1 = row.insertCell(0);
+				var cell2 = row.insertCell(1);
+				var cell3 = row.insertCell(2);
+				cell1.innerHTML = "<input id='"+activeNameBox+"' type='text' size='14' readonly value='From map'>";
+				cell2.innerHTML = "<input type='text' size='5' maxlength='5'>";
+				cell3.innerHTML = "<a><img src='img/remove.png' width=20 height=20 onClick=\"deleteAssemblyPoint($(this).parents('tr')[0].rowIndex)\"></a><input id='"+activeCoordinatesBox+"' type='hidden' value=''><input id='"+activeMarkerId+"' type='hidden' value='"+activeMarkerId+"'>";
+				//document.getElementById("dump").innerHTML = "{"+activeCoordinatesBox+"+"+activeMarkerId+"}";
+			}
+		}
+		
+		// Animation example
+		
+		//var myMarker = new mapboxgl.Marker();
+		//var myMarkerLng = 13.404954;
+		//var myMarkerLat = 52.520007;
+		//myMarker.setLngLat([myMarkerLng, myMarkerLat]);
+		//myMarker.addTo(map);
+		 
+		//function animateMarker(timestamp) {
+		//	var radius = 20;
+		 
+			// Update the data to a new position based on the animation timestamp. The
+			// divisor in the expression `timestamp / 1000` controls the animation speed.
+		//	if(myMarkerLng < 13.594954) {
+		//		myMarkerLng += 0.001;
+		//		myMarkerLat += 0.001;
+		//		myMarker.setLngLat([myMarkerLng,myMarkerLat]);
+		 
+				// Ensure it's added to the map. This is safe to call if it's already added.
+		//		myMarker.addTo(map);
+		 	
+				// Request the next frame of the animation.
+		//		r(animateMarker);
+		//	}
+		//}
+
+		function clearAll() {
+			var riskAreaTable = document.getElementById("riskAreaTable");
+			var assemblyPointTable = document.getElementById("assemblyPointTable");
+			
+			while(riskAreaTable.rows.length > 1) {
+				var markerId = riskAreaTable.rows[1].cells[2].getElementsByTagName("input")[1].value;
+				var marker = markersDict[markerId];
+				marker.remove();
+				delete markersDict[markerId];
+				riskAreaTable.deleteRow(1);
+			}
+			while(assemblyPointTable.rows.length > 1) {
+				var markerId = assemblyPointTable.rows[1].cells[2].getElementsByTagName("input")[1].value;
+				var marker = markersDict[markerId];
+				marker.remove();
+				delete markersDict[markerId];
+				assemblyPointTable.deleteRow(1);
+			}
+			
+			mapClickActiveInput = -1;
+			activeNameBox = null;
+			activeCoordinatesBox = null;
+			activeMarkerId = null;
+			
+			layersList.forEach(function (item, index) {
+				map.removeLayer(item)
+			});
+
+            sourceIdsAdded.forEach(function (item, index) {
+                map.removeSource(item)
+            })
+            sourceIdsAdded = [];
+			markersDict = {};
+			document.getElementById('dump').value = "";
+            let resTable = document.getElementById("resultTable");
+            let rows = resTable.rows;
+            let i = rows.length;
+            while (--i) {
+                rows[i].parentNode.removeChild(rows[i]);
+            }
+            document.getElementById('egressTimeLabel').innerHTML = 0;
+            document.getElementById('simulatedTimeLabel').innerHTML = 0;
+            document.getElementById("simulationRes").hidden = true;
+        }
+		
+		function computeEvacuationPlan() {
+			// Start the animation.
+			// requestAnimationFrame(animateMarker);
+			document.getElementById("loadingGif").hidden = false;
+			var requestText = "http://localhost:8080/eurasim_war_exploded/EvacuationPlanner?";
+			
+			var riskAreaTable = document.getElementById("riskAreaTable");
+			var assemblyPointTable = document.getElementById("assemblyPointTable");
+						
+			//table.rows[assemblyId].cells[2].getElementsByTagName("input")[1].value;
+			
+			if(riskAreaTable.rows.length < 2 ||assemblyPointTable.rows.length < 2) {
+				alert("Incomplete input. Please define at least 1 risk area and at least one assembly point.");
+			}
+			else {
+				var coordinates = riskAreaTable.rows[1].cells[2].getElementsByTagName('input')[0].value.split(", ");
+				var capacity = riskAreaTable.rows[1].cells[1].getElementsByTagName('input')[0].value;
+				if(isNaN(capacity) || capacity <=0) {
+					alert("Number of evacuees on risk area 1 is not defined properly (it has to be a number > 0).");
+					return;
+				}
+				requestText += "r1lon="+coordinates[0]+"&r1lat="+coordinates[1]+"&r1ev="+capacity;
+				
+				var i;
+				for(i=2;i<riskAreaTable.rows.length;i++) {
+					coordinates = riskAreaTable.rows[i].cells[2].getElementsByTagName('input')[0].value.split(", ");
+					
+					var capacity = riskAreaTable.rows[i].cells[1].getElementsByTagName('input')[0].value;
+					if(isNaN(capacity) || capacity <=0) {
+						alert("Number of evacuees on risk area "+i+" is not defined properly (it has to be a number > 0).");
+						return;
+					}
+					requestText += "&r"+i+"lon="+coordinates[0]+"&r"+i+"lat="+coordinates[1]+"&r"+i+"ev="+capacity;
+				}
+				
+				for(i=1;i<assemblyPointTable.rows.length;i++) {
+					coordinates = assemblyPointTable.rows[i].cells[2].getElementsByTagName('input')[0].value.split(", ");
+					requestText += "&a"+i+"lon="+coordinates[0]+"&a"+i+"lat="+coordinates[1];
+					
+					var capacity = assemblyPointTable.rows[i].cells[1].getElementsByTagName('input')[0].value;
+					if(isNaN(capacity) || capacity <=0) {
+						alert("Capacity of assembly point "+i+" is not defined properly (it has to be a number > 0).");
+						return;
+					}
+					requestText += "&a"+i+"lon="+coordinates[0]+"&a"+i+"lat="+coordinates[1]+"&a"+i+"cap="+capacity;
+				}
+				
+				if(document.getElementById("algorithm").value == 'None') {
+					alert("No evacuation planning algorithm has been selected.");
+					return;
+				}
+				
+				requestText += "&algorithm="+document.getElementById("algorithm").value;
+				if(document.getElementById('simulationBox').checked == true) {
+					requestText += "&simulation=true";
+                    document.getElementById("simulationRes").hidden = false;
+                }
+				else
+					requestText += "&simulation=false";
+				//requestText += "&simulation="+document.getElementById("algorithm").value;
+				
+				//document.getElementById("dump").value = requestText;
+				
+				const http = new XMLHttpRequest();
+				http.open("GET", requestText);
+				http.send();
+				http.onreadystatechange = (e) => {
+					if (http.readyState == 4 && http.status == 200) {
+						//document.getElementById("collapse82").collapse();
+						var responseJSONAll = JSON.parse(http.responseText)
+						document.getElementById("dump").value = JSON.stringify(responseJSONAll);
+						// EXAMPLE
+						var maxValue = -1;
+                        document.getElementById("simulatedTimeLabel").innerHTML = responseJSONAll[0]["egress"];
+						for(counter = 1;counter < responseJSONAll.length;counter++) {
+							//document.getElementById("dump").value += counter+"<br>";
+							routeName = 'route'+counter;
+							document.getElementById("dump").value += "linetype = "+responseJSONAll[counter]["data"]["properties"]["linetype"]+",";
+							map.addSource(routeName, responseJSONAll[counter]);
+                            sourceIdsAdded.push(routeName);
+						
+							if(responseJSONAll[counter]["data"]["properties"]["linetype"] == "route") {
+								newLayer = map.addLayer({
+									'id': routeName,
+									'type': 'line',
+									'source': routeName,
+									'layout': {
+										'line-join': 'round',
+										'line-cap': 'round'
+									},
+									'paint': {
+										'line-color': routeColors[(counter-1) % routeColors.length],
+										'line-width': 8
+									}
+								});
+								
+								var table = document.getElementById("resultTable");
+								var row = table.insertRow(-1);
+
+								var cell1 = row.insertCell(0);
+								var cell2 = row.insertCell(1);
+								var cell3 = row.insertCell(2);
+
+								cell1.innerHTML = "<div class='square' style='width:14px; height:14px; background-color: "+routeColors[counter-1 % routeColors.length]+";'></div>";
+								cell2.innerHTML = ""+responseJSONAll[counter]["data"]["properties"]["evacuees"];
+								cell3.innerHTML = ""+responseJSONAll[counter]["data"]["properties"]["totalDistance"];
+								
+								if(maxValue < responseJSONAll[counter]["data"]["properties"]["totalDistance"]) {
+									maxValue = responseJSONAll[counter]["data"]["properties"]["totalDistance"];
+								}
+							}
+							else if (responseJSONAll[counter]["data"]["properties"]["linetype"] == "connector") {
+								newLayer = map.addLayer({
+									'id': routeName,
+									'type': 'line',
+									'source': routeName,
+									'layout': {
+										'line-join': 'round',
+										'line-cap': 'round'
+									},
+									'paint': {
+										'line-color': '#669DF6',
+										'line-width': 8,
+										'line-dasharray': [0.1, 1.8]
+									}
+								});
+							}
+							document.getElementById("egressTimeLabel").innerHTML = maxValue;
+							layersList.push(routeName)
+						}
+                        document.getElementById("loadingGif").hidden = true;
+					}
+				}
+			}
+		}
+	</script>
+</body>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="./bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</html>

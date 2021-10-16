@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Evacuation Planning</title>
+
+	<!--Include JQM and JQ-->
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.structure.min.css" />
+	<link rel="stylesheet" href="css/style_test.css">
+	<link rel="stylesheet" href="css/prettify.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+	<script src="js/jqm.globals.js"></script>
+	<script src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
+
+	<!--JQM SlideMenu-->
+	<link rel="stylesheet" href="css/jqm.slidemenu.css" />
+	<link href="http://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">
+	<script src="js/jqm.slidemenu.js"></script>
+
+	<!--MapBox-->
+	<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js"></script>
+	<link href="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css" rel="stylesheet" />
+    
+    <!--Prism-->
+	<link rel="stylesheet" href="css/prism.css">
+    <script src="js/prism.js"></script>
+</head>
+<body>
+
+	<div id="slidemenu">
+		<img src="img/mylogo.png" style="width:116pt; height:80pt;" alt="logo">
+		<div class="input">
+			<h4 style="margin-bottom:1pt">Evacuation points <img src="img/exclamation.png" alt="exclam"></h4>
+			
+			<table style="width: 150pt; margin-left: 14pt;">
+				<tr>
+					<th></th>
+					<th style="font-size:11pt; padding: 0px;">People</th>
+					<th style="font-size:11pt; padding: 0px;">Location</th>
+					<th></th>
+				</tr>
+				<tr>
+					<td>1.</td>
+					<td><input type="text" id="inputSourcePop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputSource" value="" readonly></td>
+					<td><button class="button" id="addEvacPoint" onClick="enableInputForSource()">+</button></td>
+				</tr>
+			</table>
+			
+			<h4 style="margin-bottom:1pt; margin-top: 10pt;">Up to 5 assembly points <img src="img/assembly.png" alt="assemb"></h4>
+			
+			<table style="width: 150pt; margin-left: 14pt;">
+				<tr style="padding: 0px; height: 5pt;">
+					<th style="padding: 0px; height: 5pt;"></th>
+					<th style="font-size:11pt; padding: 0px; height: 5pt;">Capacity</th>
+					<th style="font-size:11pt; padding: 0px; height: 5pt;">Location</th>
+					<th style="padding: 0px; height: 5pt;"></th>
+				</tr>
+				<tr>
+					<td>1.</td>
+					<td><input type="text" id="inputTarget1Pop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputTarget1" value="" readonly></td>
+					<td><button class="button" id="addTargetPoint1" onClick="enableInputForTarget(1)">+</button></td>
+				</tr>
+				<tr>
+					<td>2.</td>
+					<td><input type="text" id="inputTarget2Pop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputTarget2" value="" readonly></td>
+					<td><button class="button" id="addTargetPoint2" onClick="enableInputForTarget(2)">+</button></td>
+				</tr>
+				<tr>
+					<td>3.</td>
+					<td><input type="text" id="inputTarget3Pop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputTarget3" value="" readonly></td>
+					<td><button class="button" id="addTargetPoint3" onClick="enableInputForTarget(3)">+</button></td>
+				</tr>
+				<tr>
+					<td>4.</td>
+					<td><input type="text" id="inputTarget4Pop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputTarget4" value="" readonly></td>
+					<td><button class="button" id="addTargetPoint4" onClick="enableInputForTarget(4)">+</button></td>
+				</tr>
+				<tr>
+					<td>5.</td>
+					<td><input type="text" id="inputTarget5Pop" value="0" maxlength="6"></td>
+					<td><input type="text" id="inputTarget5" value="" readonly></td>
+					<td><button class="button" id="addTargetPoint5" onClick="enableInputForTarget(5)">+</button></td>
+				</tr>
+			</table>
+			
+			<h4 style="margin-bottom:1pt; margin-top: 10pt;">Choose algorithm</h4>
+			
+			<select id="algoselect" style="width:80%; height:20pt;	font-size:14px; margin-bottom: 8pt;">
+  				<option value="1" selected="selected">Algorithm 1</option>
+  				<option value="2">Algorithm 2</option>
+  				<option value="3">Algorithm 3</option>
+			</select>
+						
+			<table style="width: 100%; margin-top:0pt;">
+				<tr>
+					<td style="text-align:left;"><button style="margin-left:14px;" class="clearbutton" onClick="clearField()">Clear All</button></td>
+					<td style="text-align:right;"><button style="margin-right:14px;" class="button" id="getRoute">Compute Plan</button></td>
+				</tr>
+			</table>
+		</div>
+		<div class="result">
+			
+		</div>
+	</div>
+
+	<div data-role="page" id="main_page" data-theme="a">
+		<header>
+			<a href="#" data-slidemenu="#slidemenu" id="slidemenuopenbutton"><img class="toggle_menu" src="img/threelines.png"  alt="lines"></a>  
+    		<label>Evacuation Planning - Test Page</label>
+		</header>
+
+		<div class="map_container" data-role="content" style="width: 100%">
+			<div id="map" style="width: 100%"></div>
+			<div class="shadow"></div>
+		</div>
+	</div>
+	<script>
+		var mapClickActiveInput = -1;
+		var markers = new Array("","");
+		var startLon = -1;
+		var startLat = -1;
+
+		mapboxgl.accessToken = 'pk.eyJ1IjoidGhvZG9yaXNjam4iLCJhIjoiY2tkcWtocWJkMHBrcjJzb2RkazFhbnJhdyJ9.oK7oBDrfCyJWMtbnMcp5uQ';
+		var map = new mapboxgl.Map({
+			container: 'map', // container id
+			style: 'mapbox://styles/mapbox/streets-v11', // style URL
+			center: [13.404954, 52.520007], // starting position [lng, lat]
+			zoom: 10 // starting zoom
+		});
+	
+		map.once('load', () => {
+	    	map.resize();
+		});
+	
+		map.on('click', function (e) { 
+				if(mapClickActiveInput != -1) {
+				
+					var x = JSON.stringify(e.lngLat["lng"])
+					var y = JSON.stringify(e.lngLat["lat"])
+				
+					if(mapClickActiveInput == 0) { 	
+						document.getElementById('inputSource').value = x+", "+y;
+						document.getElementById('inputSourcePop').value = 1;
+						
+						var el = document.createElement('div');
+						el.style.backgroundImage = "url('img/exclamation.png')";
+						el.style.width = '28px';
+						el.style.height = '28px';
+					    				
+						var marker = new mapboxgl.Marker(el);
+						marker.setLngLat([x, y]);
+						marker.addTo(map);
+										
+						markers[0] = marker;	
+					}
+					else if(mapClickActiveInput > 0) {
+						document.getElementById('inputTarget'+mapClickActiveInput).value = x+", "+y;
+						document.getElementById('inputTarget'+mapClickActiveInput+'Pop').value = 1;
+							
+						var el = document.createElement('div');
+						el.style.backgroundImage = "url('img/assembly.png')";
+						el.style.width = '28px';
+						el.style.height = '28px';
+					    				
+						var marker = new mapboxgl.Marker(el);
+						marker.setLngLat([x, y]);
+						marker.addTo(map);
+										
+						markers[mapClickActiveInput] = marker;	
+					}
+				}
+				mapClickActiveInput = -1;
+			}
+		);
+	
+		function enableInputForSource() {
+    		document.getElementById('inputSource').value = "Select point on map.";
+    		mapClickActiveInput = 0;
+    		try {
+    			markers[0].remove();
+			}
+			catch(err) {
+			}
+    	}
+	
+		function enableInputForTarget(i) {
+    		document.getElementById('inputTarget'+i).value = "Select point on map.";
+    		mapClickActiveInput = i;
+    		try {
+    			markers[i].remove();
+			}
+			catch(err) {
+			}
+    	}
+	
+		function clearField() {
+    		document.getElementById('inputSource').value = "";
+    		document.getElementById('inputSourcePop').value = "0";
+    		document.getElementById('inputTarget1').value = "";
+    		document.getElementById('inputTarget1Pop').value = "0";
+    		document.getElementById('inputTarget2').value = "";
+    		document.getElementById('inputTarget2Pop').value = "0";
+    		document.getElementById('inputTarget3').value = "";
+    		document.getElementById('inputTarget3Pop').value = "0";
+    		document.getElementById('inputTarget4').value = "";
+    		document.getElementById('inputTarget4Pop').value = "0";
+    		document.getElementById('inputTarget5').value = "";
+    		document.getElementById('inputTarget5Pop').value = "0";
+    		mapClickActiveInput = -1;
+    		markers.forEach(function(marker) {
+    			try {
+    				marker.remove(); 
+    			}
+    			catch(err) {
+    			}
+    		});
+    	}
+	
+		$(document).on("click", "#getRoute", function() { // When HTML DOM "click" event is invoked on element with ID "somebutton", execute the following function...
+			var start = document.getElementById('inputSource').value.split(",");
+		
+			var requestText = "../../simevac/SingleSourceEvacuationPlanner"+
+    			"?startx="+start[0]+
+    		   	"&starty="+start[1]+
+    		   	"&startp="+document.getElementById('inputSourcePop').value;
+    	
+			var i;
+			for (i = 1; i < 6; i++) { 
+				if(document.getElementById('inputTarget'+i).value != "") {
+					var target = document.getElementById('inputTarget'+i).value.split(",");
+					requestText = requestText.concat(
+							"&target"+i+"x="+target[0]+
+				    	   	"&target"+i+"y="+target[1]+
+				    	   	"&target"+i+"p="+document.getElementById('inputTarget'+i+'Pop').value);
+				}
+			}
+				
+				
+    		requestText = requestText.concat("&algo="+document.getElementById('algoselect').value);
+				
+    		$.get(requestText,
+          		function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...  
+    				//document.getElementById("jsonCode").innerHTML = responseText;
+           			//var geojson = JSON.parse(responseText);
+           			//map.featureLayer.setGeoJSON(geojson);
+            	}
+        	);
+    	});
+	</script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+html {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    height: 100%
+}
+
+body {
+	margin: 0;
+    padding: 0;
+    line-height: 2;
+    color: #444;
+    background: #ededed;
+    font-family: Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    font-size: 18px;
+}
+
+header {
+    width: 100%;
+    overflow: hidden;
+    height: 42px;
+    background: #007BE2; 
+    color: #fff;
+    text-align:left;
+    padding: 0;
+    z-index:9999
+}
+
+header .toggle_menu {
+    width: 60px;
+    height: 100%;
+}
+
+header label {
+    margin-left: 10px;
+    vertical-align: top;
+    font-size: 21px;
+}
+
+#map {
+	position:absolute; 
+	top:0;
+	bottom:0;
+	width:100%;
+	height:100%;
+}
+
+#map_container {
+	width:100%;
+	height:100%;
+}
+
+#inputSource {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputSourcePop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#inputTarget1 {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputTarget1Pop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#inputTarget2 {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputTarget2Pop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#inputTarget3 {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputTarget3Pop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#inputTarget4 {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputTarget4Pop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#inputTarget5 {
+	width:105pt;
+	height:16pt;
+	font-size:14px;
+}
+#inputTarget5Pop {
+	width:40pt;
+	height:16pt;
+	font-size:14px;
+}
+
+#addEvacPoint {
+	margin-top:0pt;
+	height:20pt;
+}
+#addTargetPoint1 {
+	margin-top:0pt;
+	height:20pt;
+}
+#addTargetPoint2 {
+	margin-top:0pt;
+	height:20pt;
+}
+#addTargetPoint3 {
+	margin-top:0pt;
+	height:20pt;
+}
+#addTargetPoint4 {
+	margin-top:0pt;
+	height:20pt;
+}
+#addTargetPoint5 {
+	margin-top:0pt;
+	height:20pt;
+}
+
+#getRoute {
+	margin-right:10pt;
+	margin-left:10pt;
+	height:20pt;
+}
+
+.shadow {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    box-shadow: 0px 5px 6px 0px #000000;
+    top: -4px;
+    left: 0;
+}
+
+.ui-content {
+	padding-left:0;
+    padding-right:0;
+    padding-top:0;
+    padding-bottom:0;
+    position:relative;
+    height:95%;
+}
+
+.ui-page {
+	border-top: thick #007BE2;
+	padding-top:0;
+	height:100%;
+}
+
+.button {
+	margin-top: 15px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 4px 12px;
+    border: 1px solid #0069c0;
+    border-radius: 2px;
+    background: #007ce2;
+    background: -webkit-gradient(linear, left top, left bottom, from(#007ce2), to(#007ce2));
+    background: -moz-linear-gradient(top, #007ce2, #007ce2);
+    background: linear-gradient(to bottom, #007ce2, #007ce2);
+    text-shadow: #003e71 1px 1px 1px;
+    font: normal normal bold 14px arial;
+    color: #ffffff;
+    text-decoration: none;
+}
+.button:hover,
+.button:focus {
+    border: 1px solid #007ce2;
+    background: #0095ff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#0095ff), to(#0095ff));
+    background: -moz-linear-gradient(top, #0095ff, #0095ff);
+    background: linear-gradient(to bottom, #0095ff, #0095ff);
+    color: #ffffff;
+    text-decoration: none;
+}
+.button:active {
+    background: #004a88;
+    background: -webkit-gradient(linear, left top, left bottom, from(#004a88), to(#007ce2));
+    background: -moz-linear-gradient(top, #004a88, #007ce2);
+    background: linear-gradient(to bottom, #004a88, #007ce2);
+}
+
+.clearbutton {
+	margin-top: 15px;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding: 4px 12px;
+    border: 1px solid #a1a1a1;
+    border-radius: 2px;
+    background: #e6e6e6;
+    background: -webkit-gradient(linear, left top, left bottom, from(#e6e6e6), to(#e6e6e6));
+    background: -moz-linear-gradient(top, #e6e6e6, #e6e6e6);
+    background: linear-gradient(to bottom, #e6e6e6, #e6e6e6);
+    text-shadow: #ffffff 1px 1px 1px;
+    font: normal normal bold 14px arial;
+    color: #646464;
+    text-decoration: none;
+}
+.clearbutton:hover,
+.clearbutton:focus {
+    border: 1px solid #e6e6e6;
+    background: #ffffff;
+    background: -webkit-gradient(linear, left top, left bottom, from(#ffffff), to(#ffffff));
+    background: -moz-linear-gradient(top, #ffffff, #ffffff);
+    background: linear-gradient(to bottom, #ffffff, #ffffff);
+    color: #646464;
+    text-decoration: none;
+}
+.clearbutton:active {
+    background: #a1a1a1;
+    background: -webkit-gradient(linear, left top, left bottom, from(#a1a1a1), to(#e6e6e6));
+    background: -moz-linear-gradient(top, #a1a1a1, #e6e6e6);
+    background: linear-gradient(to bottom, #a1a1a1, #e6e6e6);
+}
+
+#requestButton, #geojsonButton {
+	margin-top:20px;
+}
+
+#geojsonButton {
+	margin-left:18px;
+}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background: #000;
+    display: none;
+}
+
+

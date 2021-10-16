@@ -1,0 +1,44 @@
+<component name="libraryTable">
+  <library name="netlogo-6.2.0">
+    <CLASSES>
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/netlogo-6.2.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/args4j-2.0.12.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/asm-all-5.0.4.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/autolink-0.6.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/behaviorsearch.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/commons-codec-1.10.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/commons-logging-1.1.1.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/config-1.3.1.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-ext-autolink-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-ext-escaped-character-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-ext-typographic-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-formatter-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/flexmark-util-0.20.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/gluegen-rt.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/httpclient-4.2.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/httpcore-4.2.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/httpmime-4.2.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/java-objc-bridge-1.0.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jcommon-1.0.16.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jfreechart-1.0.13.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jhotdraw-6.0b1.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jmf-2.1.1e.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jna-4.2.2.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/jogl-all.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/json-simple-1.1.1.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/log4j-1.2.16.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/macro-compat_2.12-1.1.1.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/netlogo-mac-app.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/parboiled_2.12-2.1.3.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/picocontainer-2.13.6.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/rsyntaxtextarea-2.6.0.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/scala-library-2.12.12.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/scala-parser-combinators_2.12-1.0.5.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/shapeless_2.12-2.3.2.jar!/" />
+      <root url="jar:///Applications/NetLogo 6.2.0/Java/zip4j-1.3.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
